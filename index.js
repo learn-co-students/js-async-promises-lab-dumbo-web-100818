@@ -5,3 +5,50 @@ const questions = [
 ]
 
 let question;
+
+const container = document.querySelector(".question-container");
+
+function appendQuestion(question) {
+  container.innerHTML = question.questionText;
+};
+
+function askQuestionThen(time) {
+  question = questions[0];
+  appendQuestion(question);
+  return new Promise(function(resolve, reject) {
+    setTimeout(function() {
+      resolve(question);
+    }, time);
+  });
+};
+
+function removeQuestion() {
+  container.innerHTML = "";
+}
+
+function askQuestionThenRemoveQuestion(time) {
+  return askQuestionThen(time).then(removeQuestion);
+};
+
+function trueAndFalseButtons() {
+  const buttons = document.querySelectorAll("div.btn");
+  return buttons;
+};
+
+function toggleTrueAndFalseButtons() {
+  const buttons = trueAndFalseButtons()
+  buttons.forEach(function(button) {
+    const classes = button.classList;
+    classes.contains("hide") ? classes.remove("hide") : classes.add("hide");
+  });
+};
+
+function displayQuestionOnClick() {
+  const buttons = document.querySelectorAll('.btn');
+  buttons.forEach(function(button) {
+    button.addEventListener("click", function(event) {
+      toggleTrueAndFalseButtons();
+      askQuestionThenRemoveQuestion(5000);
+    });
+  });
+};
